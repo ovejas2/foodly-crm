@@ -1129,6 +1129,7 @@ function renderPipeline() {
               <div class="prospect-value">$${(valorEstimado(p)/1000).toFixed(0)}k/m</div>
               <div class="prospect-days ${diasDesde(p.ultimaActividad)>7?'urgent':diasDesde(p.ultimaActividad)>14?'overdue':''}">${diasDesde(p.ultimaActividad)}d</div>
             </div>
+            ${p.etapa !== 'cierre' ? `<button style="width:100%;margin-top:.5rem;padding:.3rem;background:rgba(31,215,154,.08);border:1px solid rgba(31,215,154,.2);border-radius:4px;color:var(--green);font-size:.7rem;font-weight:600;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();moverEtapa(${p.id})">Avanzar etapa →</button>` : `<button style="width:100%;margin-top:.5rem;padding:.3rem;background:rgba(31,215,154,.15);border:1px solid var(--green);border-radius:4px;color:var(--green);font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();moverEtapa(${p.id})">✓ Marcar ganado</button>`}
           </div>`).join('')}
           <div class="add-card" onclick="openModalEtapa('${etapa}')">+ Agregar</div>
         </div>
@@ -1272,15 +1273,23 @@ function renderTareas() {
 // ACTIONS
 // ═══════════════════════════════════════════════
 function openModal(type) {
+  if (type === 'prospecto') {
+    editingId = null;
+    document.querySelector('#modal-prospecto .modal-title').textContent = 'Nuevo prospecto';
+    ['f-empresa','f-contacto','f-cargo','f-telefono','f-email','f-personas','f-notas','f-direccion'].forEach(id => { document.getElementById(id).value = ''; });
+  }
   document.getElementById('modal-' + type).classList.add('open');
 }
 function openModalEtapa(etapa) {
+  editingId = null;
   document.getElementById('f-etapa').value = etapa;
-  openModal('prospecto');
+  document.getElementById('modal-prospecto').classList.add('open');
 }
 function closeModal(type) {
   document.getElementById('modal-' + type).classList.remove('open');
 }
+
+let editingId = null;
 
 function saveProspecto() {
   const empresa = document.getElementById('f-empresa').value.trim();
@@ -1288,10 +1297,8 @@ function saveProspecto() {
   if (!empresa || !contacto) { showToast('⚠ Empresa y contacto son requeridos'); return; }
 
   const prospectos = DB.prospectos();
-  const nuevo = {
-    id: Date.now(),
-    empresa,
-    contacto,
+  const datos = {
+    empresa, contacto,
     cargo: document.getElementById('f-cargo').value.trim(),
     telefono: document.getElementById('f-telefono').value.trim(),
     email: document.getElementById('f-email').value.trim(),
@@ -1300,15 +1307,25 @@ function saveProspecto() {
     prioridad: document.getElementById('f-prioridad').value,
     direccion: document.getElementById('f-direccion').value.trim(),
     notas: document.getElementById('f-notas').value.trim(),
-    creado: new Date().toISOString().split('T')[0],
     ultimaActividad: new Date().toISOString().split('T')[0],
   };
-  prospectos.push(nuevo);
-  DB.set('prospectos', prospectos);
-  DB.addActividad(`Nuevo prospecto agregado: <strong>${empresa}</strong>`, '#5B9BD5');
+
+  if (editingId) {
+    const idx = prospectos.findIndex(p => p.id === editingId);
+    if (idx !== -1) { prospectos[idx] = { ...prospectos[idx], ...datos }; }
+    DB.set('prospectos', prospectos);
+    DB.addActividad(`<strong>${empresa}</strong> actualizado`, '#F4C843');
+    showToast('✓ Prospecto actualizado');
+  } else {
+    prospectos.push({ id: Date.now(), creado: new Date().toISOString().split('T')[0], ...datos });
+    DB.set('prospectos', prospectos);
+    DB.addActividad(`Nuevo prospecto: <strong>${empresa}</strong>`, '#5B9BD5');
+    showToast('✓ Prospecto guardado');
+  }
+
+  editingId = null;
   closeModal('prospecto');
   ['f-empresa','f-contacto','f-cargo','f-telefono','f-email','f-personas','f-notas','f-direccion'].forEach(id => document.getElementById(id).value = '');
-  showToast('✓ Prospecto guardado');
   render();
 }
 
@@ -1361,6 +1378,7 @@ function moverEtapa(id) {
 function editProspecto(id) {
   const p = DB.prospectos().find(p => p.id === id);
   if (!p) return;
+  editingId = id;
   document.getElementById('f-empresa').value = p.empresa;
   document.getElementById('f-contacto').value = p.contacto;
   document.getElementById('f-cargo').value = p.cargo || '';
@@ -1371,7 +1389,8 @@ function editProspecto(id) {
   document.getElementById('f-prioridad').value = p.prioridad;
   document.getElementById('f-direccion').value = p.direccion || '';
   document.getElementById('f-notas').value = p.notas || '';
-  openModal('prospecto');
+  document.querySelector('#modal-prospecto .modal-title').textContent = 'Editar prospecto';
+  document.getElementById('modal-prospecto').classList.add('open');
 }
 
 function exportData() {
