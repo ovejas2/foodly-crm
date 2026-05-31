@@ -1129,7 +1129,10 @@ function renderPipeline() {
               <div class="prospect-value">$${(valorEstimado(p)/1000).toFixed(0)}k/m</div>
               <div class="prospect-days ${diasDesde(p.ultimaActividad)>7?'urgent':diasDesde(p.ultimaActividad)>14?'overdue':''}">${diasDesde(p.ultimaActividad)}d</div>
             </div>
-            ${p.etapa !== 'cierre' ? `<button style="width:100%;margin-top:.5rem;padding:.3rem;background:rgba(31,215,154,.08);border:1px solid rgba(31,215,154,.2);border-radius:4px;color:var(--green);font-size:.7rem;font-weight:600;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();moverEtapa(${p.id})">Avanzar etapa →</button>` : `<button style="width:100%;margin-top:.5rem;padding:.3rem;background:rgba(31,215,154,.15);border:1px solid var(--green);border-radius:4px;color:var(--green);font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();moverEtapa(${p.id})">✓ Marcar ganado</button>`}
+            <div style="display:flex;gap:.35rem;margin-top:.5rem;">
+              ${p.etapa !== 'cierre' ? `<button style="flex:1;padding:.3rem;background:rgba(31,215,154,.08);border:1px solid rgba(31,215,154,.2);border-radius:4px;color:var(--green);font-size:.7rem;font-weight:600;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();moverEtapa(${p.id})">Avanzar →</button>` : `<button style="flex:1;padding:.3rem;background:rgba(31,215,154,.15);border:1px solid var(--green);border-radius:4px;color:var(--green);font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();moverEtapa(${p.id})">✓ Ganado</button>`}
+              <button style="padding:.3rem .5rem;background:rgba(226,75,74,.08);border:1px solid rgba(226,75,74,.2);border-radius:4px;color:#E24B4A;font-size:.7rem;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;" onclick="event.stopPropagation();eliminarProspecto(${p.id})">🗑</button>
+            </div>
           </div>`).join('')}
           <div class="add-card" onclick="openModalEtapa('${etapa}')">+ Agregar</div>
         </div>
@@ -1373,6 +1376,17 @@ function moverEtapa(id) {
     showToast(`→ ${p.empresa} avanzó a ${ETAPAS[nueva]?.label || nueva}`);
     render();
   }
+}
+
+function eliminarProspecto(id) {
+  const prospectos = DB.prospectos();
+  const p = prospectos.find(p => p.id === id);
+  if (!p) return;
+  if (!confirm(`¿Eliminar "${p.empresa}"?`)) return;
+  DB.set('prospectos', prospectos.filter(p => p.id !== id));
+  DB.addActividad(`Prospecto eliminado: <strong>${p.empresa}</strong>`, '#E24B4A');
+  showToast('🗑 Prospecto eliminado');
+  render();
 }
 
 function editProspecto(id) {
