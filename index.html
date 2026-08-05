@@ -1,707 +1,924 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>foodly. CRM</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<title>Camberwell — Tabaco Ross Premium · Distribución B2B RM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0F0D;--bg2:#111710;--bg3:#161D14;--bg4:#1C2419;--green:#1FD79A;--green2:#0FAF7A;--green3:rgba(31,215,154,0.12);--green4:rgba(31,215,154,0.06);--text:#E8EDE6;--text2:#8A9688;--text3:#4A5448;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.04);--yellow:#F4C843;--red:#E24B4A;--blue:#5B9BD5;--orange:#E8874A;--purple:#9B7FD4;--r:10px;--rs:6px;}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{font-size:14px;}
-body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:var(--bg2);}
-::-webkit-scrollbar-thumb{background:var(--text3);border-radius:2px;}
-.app{display:flex;height:100vh;}
+/* ─── TOKENS ──────────────────────────────────────────────────────────────── */
+:root {
+  --bg:         #0E0C09;
+  --surface:    #1A1510;
+  --surface-2:  #231C14;
+  --border:     #2E2416;
+  --border-hi:  #5C4A28;
+  --bronze:     #C59B27;
+  --bronze-dim: #8A6B18;
+  --cream:      #F4F1EA;
+  --muted:      #9A8E7A;
+  --serif:      "Playfair Display", Georgia, serif;
+  --sans:       "Inter", -apple-system, sans-serif;
+}
 
-/* SIDEBAR */
-.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 0;}
-.logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
-.logo-text{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-0.03em;}
-.logo-text span{color:var(--green);}
-.logo-sub{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
-.nav-section{padding:0 .75rem;margin-bottom:.25rem;}
-.nav-label{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:.5rem .5rem .25rem;}
-.nav-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;border-radius:var(--rs);cursor:pointer;color:var(--text2);font-size:.85rem;font-weight:500;transition:all .15s;position:relative;}
-.nav-item:hover{background:var(--bg3);color:var(--text);}
-.nav-item.active{background:var(--green3);color:var(--green);}
-.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:60%;background:var(--green);border-radius:2px;}
-.nav-icon{font-size:1rem;width:18px;text-align:center;}
-.nav-badge{margin-left:auto;background:var(--green);color:var(--bg);font-family:'Space Mono',monospace;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center;}
-.nav-badge.warn{background:var(--yellow);}
-.sidebar-footer{margin-top:auto;padding:1rem 1.25rem 0;border-top:1px solid var(--border);}
-.user-card{display:flex;align-items:center;gap:.6rem;}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--green3);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--green);flex-shrink:0;}
-.user-name{font-size:.8rem;font-weight:600;color:var(--text);}
-.user-role{font-size:.65rem;color:var(--text3);font-family:'Space Mono',monospace;}
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
 
-/* MAIN */
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
-.topbar{display:flex;align-items:center;padding:1rem 1.75rem;border-bottom:1px solid var(--border);gap:1rem;background:var(--bg);position:sticky;top:0;z-index:10;}
-.page-title{font-size:1rem;font-weight:700;color:var(--text);}
-.page-sub{font-size:.75rem;color:var(--text3);font-family:'Space Mono',monospace;}
-.topbar-actions{margin-left:auto;display:flex;gap:.5rem;}
-.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:var(--rs);font-family:'Bricolage Grotesque',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
-.btn-primary{background:var(--green);color:var(--bg);}
-.btn-primary:hover{background:var(--green2);transform:translateY(-1px);}
-.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
-.btn-ghost:hover{background:var(--bg4);color:var(--text);}
-.btn-danger{background:rgba(226,75,74,.1);color:var(--red);border:1px solid rgba(226,75,74,.2);}
-.btn-danger:hover{background:rgba(226,75,74,.2);}
-.content{padding:1.5rem 1.75rem;flex:1;}
+/* ─── UTILITIES ──────────────────────────────────────────────────────────── */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.rule {
+  border: none;
+  border-top: 1px solid var(--border-hi);
+  margin: 0;
+}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;position:relative;overflow:hidden;transition:border-color .2s;}
-.stat-card:hover{border-color:rgba(31,215,154,0.2);}
-.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent,var(--green));opacity:.4;}
-.stat-label{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem;}
-.stat-value{font-size:1.6rem;font-weight:800;color:var(--text);line-height:1;margin-bottom:.3rem;}
-.stat-sub{font-size:.72rem;color:var(--text3);}
+/* ─── NAV ────────────────────────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(14,12,9,.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+}
+.nav-brand {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--bronze);
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--cream); }
+.nav-cta {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  background: var(--bronze);
+  color: #0E0C09;
+  border-radius: 2px;
+  transition: background .2s;
+}
+.nav-cta:hover { background: #D4AF4A; }
 
-/* PIPELINE */
-.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin-bottom:1rem;}
-.pipeline-col{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.pipeline-header{padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;}
-.pipeline-stage-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.pipeline-stage-name{font-size:.72rem;font-weight:700;color:var(--text2);flex:1;text-transform:uppercase;letter-spacing:.04em;}
-.pipeline-count{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--text3);background:var(--bg3);padding:1px 6px;border-radius:10px;}
-.pipeline-cards{padding:.5rem;display:flex;flex-direction:column;gap:.4rem;min-height:100px;}
-.prospect-card{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rs);padding:.75rem;transition:all .15s;position:relative;}
-.prospect-card:hover{border-color:var(--border);background:var(--bg4);}
-.prospect-card.urgent{border-left:2px solid var(--yellow);}
-.prospect-card.hot{border-left:2px solid var(--red);}
-.prospect-name{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.prospect-meta{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.prospect-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;}
-.prospect-personas{font-size:.7rem;color:var(--text3);}
-.prospect-value{font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;color:var(--green);}
-.prospect-days{font-family:'Space Mono',monospace;font-size:.6rem;padding:1px 5px;border-radius:4px;background:var(--bg);color:var(--text3);}
-.prospect-days.warn{color:var(--yellow);background:rgba(244,200,67,.1);}
-.card-actions{display:flex;gap:.3rem;}
-.card-btn{flex:1;padding:.28rem .4rem;border-radius:4px;font-size:.68rem;font-weight:600;cursor:pointer;border:none;font-family:'Bricolage Grotesque',sans-serif;transition:all .15s;}
-.card-btn-advance{background:rgba(31,215,154,.08);border:1px solid rgba(31,215,154,.2);color:var(--green);}
-.card-btn-advance:hover{background:rgba(31,215,154,.18);}
-.card-btn-edit{background:rgba(91,155,213,.08);border:1px solid rgba(91,155,213,.2);color:var(--blue);}
-.card-btn-edit:hover{background:rgba(91,155,213,.18);}
-.card-btn-del{background:rgba(226,75,74,.08);border:1px solid rgba(226,75,74,.2);color:var(--red);flex:none;padding:.28rem .5rem;}
-.card-btn-del:hover{background:rgba(226,75,74,.18);}
-.add-card{border:1px dashed var(--border);border-radius:var(--rs);padding:.6rem;text-align:center;cursor:pointer;color:var(--text3);font-size:.75rem;transition:all .15s;}
-.add-card:hover{border-color:var(--green);color:var(--green);background:var(--green4);}
+/* ─── HERO ───────────────────────────────────────────────────────────────── */
+.hero {
+  padding: 140px 24px 100px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.hero-eyebrow { margin-bottom: 20px; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 6vw, 66px);
+  font-weight: 700;
+  line-height: 1.07;
+  letter-spacing: -.01em;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--bronze);
+}
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--bronze);
+  color: #0E0C09;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: background .2s;
+}
+.btn-primary:hover { background: #D4AF4A; }
+.btn-ghost {
+  display: inline-block;
+  padding: 14px 28px;
+  border: 1px solid var(--border-hi);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: border-color .2s, color .2s;
+}
+.btn-ghost:hover { border-color: var(--bronze); color: var(--cream); }
 
-/* TABLE */
-.data-table{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.table-head{display:grid;padding:.65rem 1.25rem;border-bottom:1px solid var(--border);gap:1rem;}
-.th{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);}
-.table-row-item{display:grid;padding:.8rem 1.25rem;border-bottom:1px solid var(--border2);gap:1rem;align-items:center;transition:background .15s;}
-.table-row-item:last-child{border-bottom:none;}
-.table-row-item:hover{background:var(--bg3);}
-.td{font-size:.82rem;color:var(--text2);}
-.td-main{color:var(--text);font-weight:600;}
-.td-mono{font-family:'Space Mono',monospace;font-size:.75rem;}
-.row-actions{display:flex;gap:.4rem;justify-content:flex-end;}
+/* ─── ARGUMENTO FINANCIERO ───────────────────────────────────────────────── */
+.financiero {
+  background: var(--surface);
+  border-top: 1px solid var(--border-hi);
+  border-bottom: 1px solid var(--border-hi);
+  padding: 72px 24px;
+}
+.financiero-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.financiero-texto h2 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 18px;
+}
+.financiero-texto h2 em { font-style: italic; color: var(--bronze); }
+.financiero-texto p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.financiero-nums {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+}
+.fin-num {
+  background: var(--surface-2);
+  padding: 28px 22px;
+  text-align: center;
+}
+.fin-num .val {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  color: var(--bronze);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.fin-num .lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.fin-num.featured { background: rgba(197,155,39,.08); border: 1px solid var(--border-hi); }
+.fin-num.featured .val { font-size: clamp(34px, 5vw, 52px); }
 
-/* STATUS */
-.status-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:600;}
-.status-pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
-.s-active{color:var(--green);background:rgba(31,215,154,.1);}
-.s-warn{color:var(--yellow);background:rgba(244,200,67,.1);}
-.s-blue{color:var(--blue);background:rgba(91,155,213,.1);}
-.s-gray{color:var(--text3);background:var(--bg3);}
+/* ─── SHOWCASE ───────────────────────────────────────────────────────────── */
+.showcase {
+  padding: 96px 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  margin-top: 52px;
+}
+.showcase-img-wrap {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.showcase-img-wrap img {
+  width: 70%;
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+.showcase-img-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(197,155,39,.07) 0%, transparent 70%);
+}
+.showcase-texto .tag {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid var(--border-hi);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  margin-bottom: 20px;
+}
+.showcase-texto h2 {
+  font-family: var(--serif);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+.showcase-texto p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+.atributos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 28px;
+}
+.atributo {
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+.atributo strong {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--bronze);
+  margin-bottom: 4px;
+}
+.atributo span { font-size: 13px; color: var(--muted); }
 
-/* TAGS */
-.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:.65rem;font-weight:600;}
-.tag-green{background:rgba(31,215,154,.1);color:var(--green);}
-.tag-yellow{background:rgba(244,200,67,.1);color:var(--yellow);}
-.tag-red{background:rgba(226,75,74,.1);color:var(--red);}
-.tag-blue{background:rgba(91,155,213,.1);color:var(--blue);}
-.tag-gray{background:var(--bg3);color:var(--text3);}
+/* ─── CATÁLOGO ───────────────────────────────────────────────────────────── */
+.catalogo {
+  padding: 96px 24px;
+  background: var(--surface);
+  border-top: 1px solid var(--border-hi);
+}
+.catalogo-inner { max-width: 1080px; margin: 0 auto; }
+.catalogo-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.catalogo-header h2 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+.catalogo-meta { font-size: 13px; color: var(--muted); text-align: right; line-height: 1.6; }
 
-/* ACTIVITY */
-.activity-feed{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.activity-header{padding:.85rem 1.25rem;border-bottom:1px solid var(--border);font-size:.85rem;font-weight:700;color:var(--text);}
-.activity-item{display:flex;gap:.75rem;padding:.7rem 1.25rem;border-bottom:1px solid var(--border2);align-items:flex-start;}
-.activity-item:last-child{border-bottom:none;}
-.activity-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;}
-.activity-text{font-size:.82rem;color:var(--text2);line-height:1.4;flex:1;}
-.activity-text strong{color:var(--text);}
-.activity-time{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--text3);white-space:nowrap;}
+/* Tabs de categoría */
+.cat-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.cat-tab {
+  padding: 8px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 2px;
+  cursor: pointer;
+  background: transparent;
+  transition: all .18s;
+}
+.cat-tab:hover { border-color: var(--border-hi); color: var(--cream); }
+.cat-tab.active { background: var(--bronze); border-color: var(--bronze); color: #0E0C09; }
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
-.modal-overlay.open{opacity:1;pointer-events:all;}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:500px;max-height:85vh;overflow-y:auto;transform:translateY(20px);transition:transform .2s;box-shadow:0 24px 64px rgba(0,0,0,.5);}
-.modal-overlay.open .modal{transform:translateY(0);}
-.modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-title{font-size:1rem;font-weight:700;color:var(--text);}
-.modal-close{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .15s;}
-.modal-close:hover{background:var(--bg4);color:var(--text);}
-.modal-body{padding:1.25rem 1.5rem;}
-.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.5rem;}
-.modal-footer-right{display:flex;gap:.5rem;}
-.form-group{margin-bottom:1rem;}
-.form-label{display:block;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem;}
-.form-input,.form-select,.form-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:.55rem .75rem;color:var(--text);font-family:'Bricolage Grotesque',sans-serif;font-size:.85rem;outline:none;transition:border-color .15s;}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(31,215,154,.08);}
-.form-select option{background:var(--bg3);}
-.form-textarea{resize:vertical;min-height:80px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.cat-section { display: none; }
+.cat-section.visible { display: block; }
 
-/* CONFIRM */
-.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
-.confirm-overlay.open{opacity:1;pointer-events:all;}
-.confirm-box{background:var(--bg2);border:1px solid rgba(226,75,74,.3);border-radius:14px;padding:1.5rem;width:360px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.5);}
-.confirm-icon{font-size:2rem;margin-bottom:.75rem;}
-.confirm-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.4rem;}
-.confirm-msg{font-size:.82rem;color:var(--text2);margin-bottom:1.25rem;line-height:1.5;}
-.confirm-actions{display:flex;gap:.5rem;justify-content:center;}
+.cat-label {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
 
-/* TOAST */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--green);border-radius:var(--r);padding:.75rem 1.25rem;font-size:.82rem;color:var(--green);z-index:300;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.4);}
-.toast.show{transform:translateY(0);opacity:1;}
-.toast.error{border-color:var(--red);color:var(--red);}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
 
-/* EMPTY */
-.empty{text-align:center;padding:3rem 1rem;}
-.empty-icon{font-size:2rem;opacity:.2;margin-bottom:.75rem;}
-.empty-text{font-size:.85rem;color:var(--text3);margin-bottom:1rem;}
+.product-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .18s, transform .18s;
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover {
+  border-color: var(--border-hi);
+  transform: translateY(-2px);
+}
+.product-card .accent { height: 2px; flex-shrink: 0; }
+.product-photo {
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 190px;
+  padding: 12px;
+  overflow: hidden;
+}
+.product-photo img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform .3s;
+}
+.product-card:hover .product-photo img { transform: scale(1.04); }
+.product-data {
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.product-data .nombre {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.product-data .notas {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .02em;
+  margin-bottom: 8px;
+}
+.product-data .precio-mayor {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bronze);
+  font-variant-numeric: tabular-nums;
+  margin-top: auto;
+}
+.product-data .precio-reventa { font-size: 11px; color: var(--muted); }
 
-/* BOTTOM GRID */
-.bottom-grid{display:grid;grid-template-columns:1fr 320px;gap:1rem;margin-top:1.5rem;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;}
-.section-title-text{font-size:.85rem;font-weight:700;color:var(--text);}
-.section-sub{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--text3);margin-top:1px;}
+/* ─── DESPACHO ───────────────────────────────────────────────────────────── */
+.despacho {
+  padding: 96px 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.despacho h2 {
+  font-family: var(--serif);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.despacho-sub { font-size: 14px; color: var(--muted); margin-bottom: 44px; }
+.despacho-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 44px;
+}
+.desp-item {
+  background: var(--surface);
+  padding: 28px 24px;
+}
+.desp-item .ico {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.desp-item strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+.desp-item span { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.desp-item .badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+.desp-item.verde .badge { background: rgba(58,125,68,.25); color: #5cad6e; }
+.desp-item.gold .badge  { background: rgba(197,155,39,.2); color: var(--bronze); }
 
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.content{animation:fadeIn .25s ease;}
+/* ─── CTA FINAL ──────────────────────────────────────────────────────────── */
+.cta-final {
+  background: var(--surface);
+  border-top: 1px solid var(--border-hi);
+  padding: 80px 24px;
+  text-align: center;
+}
+.cta-final h2 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 700;
+  margin-bottom: 14px;
+  line-height: 1.1;
+}
+.cta-final h2 em { font-style: italic; color: var(--bronze); }
+.cta-final p { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+.cta-final-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ─── FOOTER ─────────────────────────────────────────────────────────────── */
+footer {
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ─── WHATSAPP FLOTANTE ──────────────────────────────────────────────────── */
+.wa-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(37,211,102,.35);
+  transition: transform .2s, box-shadow .2s;
+}
+.wa-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(37,211,102,.5);
+}
+.wa-fab svg { width: 20px; height: 20px; fill: #fff; }
+
+/* ─── MODAL ──────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8,6,4,.85);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 300;
+  backdrop-filter: blur(6px);
+}
+.modal-overlay.open { display: flex; }
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: 4px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-top { height: 4px; border-radius: 4px 4px 0 0; }
+.modal-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 28px; height: 28px;
+  background: rgba(0,0,0,.4);
+  border: none; border-radius: 50%;
+  color: var(--cream);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.modal-photo-wrap {
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+}
+.modal-photo-wrap img { max-height: 100%; object-fit: contain; width: 55%; }
+.modal-body { padding: 28px 30px 32px; }
+.modal-body h2 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.modal-notas { font-size: 12px; color: var(--muted); margin-bottom: 14px; letter-spacing: .04em; }
+.modal-desc { font-size: 14px; line-height: 1.7; color: var(--cream); opacity: .85; margin-bottom: 22px; }
+.modal-precios {
+  display: flex; gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+}
+.modal-precio-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 4px; }
+.modal-precio-val { font-size: 22px; font-weight: 600; color: var(--bronze); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .financiero-inner { grid-template-columns: 1fr; gap: 36px; }
+  .financiero-nums { grid-template-columns: 1fr 1fr; }
+  .showcase-grid { grid-template-columns: 1fr; }
+  .showcase-img-wrap { aspect-ratio: 1; }
+  .atributos { grid-template-columns: 1fr 1fr; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .wa-fab span { display: none; }
+  .wa-fab { padding: 14px; }
+}
+@media (max-width: 480px) {
+  .hero { padding: 110px 20px 80px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="sidebar">
-  <div class="logo">
-    <div class="logo-text">foodly<span>.</span></div>
-    <div class="logo-sub">CRM v2.0</div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Principal</div>
-    <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon">⚡</span>Dashboard</div>
-    <div class="nav-item" onclick="nav('pipeline',this)"><span class="nav-icon">🎯</span>Pipeline<span class="nav-badge" id="badge-pipeline">0</span></div>
-    <div class="nav-item" onclick="nav('clientes',this)"><span class="nav-icon">🏢</span>Clientes activos<span class="nav-badge" id="badge-clientes">0</span></div>
-  </div>
-  <div class="nav-section" style="margin-top:.5rem;">
-    <div class="nav-label">Operación</div>
-    <div class="nav-item" onclick="nav('maquinas',this)"><span class="nav-icon">🤖</span>Máquinas</div>
-    <div class="nav-item" onclick="nav('tareas',this)"><span class="nav-icon">✅</span>Tareas<span class="nav-badge warn" id="badge-tareas">0</span></div>
-  </div>
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="user-avatar">F</div>
-      <div><div class="user-name">foodly.</div><div class="user-role">Admin</div></div>
-    </div>
-  </div>
-</div>
 
-<div class="main">
-  <div class="topbar">
-    <div>
-      <div class="page-title" id="page-title">Dashboard</div>
-      <div class="page-sub" id="page-sub">Vista general</div>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn btn-ghost" onclick="exportData()">↓ Exportar</button>
-      <button class="btn btn-primary" onclick="abrirProspecto()">+ Nuevo prospecto</button>
-    </div>
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Camberwell</div>
+  <div class="nav-links">
+    <a href="#financiero">Por qué Ross</a>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#despacho">Despacho</a>
   </div>
-  <div class="content" id="content"></div>
-</div>
-</div>
+  <a class="nav-cta" href="https://wa.me/56958252637" target="_blank" rel="noopener">Pedir ahora</a>
+</nav>
 
-<!-- MODAL PROSPECTO -->
-<div class="modal-overlay" id="modal-prospecto">
-<div class="modal">
-  <div class="modal-header">
-    <div class="modal-title" id="modal-prospecto-title">Nuevo prospecto</div>
-    <button class="modal-close" onclick="cerrarModal('prospecto')">✕</button>
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow hero-eyebrow">Distribuidora exclusiva · Región Metropolitana</div>
+  <h1>Tabaco Ross Premium.<br>El mejor rendimiento<br>por cm² de <em>tu mesón.</em></h1>
+  <p class="hero-sub">18 variedades de tabaco de liar con acabado de autor. Curaduría de alta rotación para minimarkets que buscan calidad superior y margen real.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#catalogo">Ver catálogo completo</a>
+    <a class="btn-ghost" href="https://wa.me/56958252637" target="_blank" rel="noopener">Solicitar muestras</a>
   </div>
-  <div class="modal-body">
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Empresa *</label><input class="form-input" id="p-empresa" placeholder="Empresa ABC SpA"></div>
-      <div class="form-group"><label class="form-label">Contacto *</label><input class="form-input" id="p-contacto" placeholder="Nombre contacto"></div>
+</section>
+
+<hr class="rule">
+
+<!-- ARGUMENTO FINANCIERO -->
+<section class="financiero" id="financiero">
+  <div class="financiero-inner">
+    <div class="financiero-texto">
+      <div class="eyebrow">El argumento financiero</div>
+      <h2>$1.200 de ganancia<br>por unidad. <em>En tu caja.</em></h2>
+      <p>A $4.600 tu costo y $5.800 el precio sugerido de reventa, cada unidad deja $1.200 netos en tu bolsillo — sin intermediarios, sin stock grande y con despacho directo a tu local.</p>
+      <p>En el espacio que ocupa una caja de 10 Ross en tu vitrina, no hay otro tabaco de liar en Chile que rote con ese margen.</p>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" id="p-cargo" placeholder="Gerente RRHH"></div>
-      <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="p-tel" placeholder="+56 9 XXXX XXXX"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="p-email" type="email" placeholder="contacto@empresa.cl"></div>
-      <div class="form-group"><label class="form-label">N° personas</label><input class="form-input" id="p-personas" type="number" placeholder="150"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Etapa</label>
-        <select class="form-select" id="p-etapa">
-          <option value="prospecto">Prospecto</option>
-          <option value="contactado">Contactado</option>
-          <option value="reunion">Reunión agendada</option>
-          <option value="propuesta">Propuesta enviada</option>
-          <option value="cierre">En cierre</option>
-        </select>
+    <div class="financiero-nums">
+      <div class="fin-num featured" style="grid-column: span 2">
+        <div class="val">$1.200</div>
+        <div class="lbl">Ganancia por unidad vendida</div>
       </div>
-      <div class="form-group"><label class="form-label">Prioridad</label>
-        <select class="form-select" id="p-prioridad">
-          <option value="normal">Normal</option>
-          <option value="alta">Alta</option>
-          <option value="urgente">Urgente</option>
-        </select>
+      <div class="fin-num">
+        <div class="val">26%</div>
+        <div class="lbl">Margen bruto sobre precio de venta</div>
+      </div>
+      <div class="fin-num">
+        <div class="val">18</div>
+        <div class="lbl">Sabores exclusivos en 45g</div>
+      </div>
+      <div class="fin-num">
+        <div class="val">$4.600</div>
+        <div class="lbl">Tu costo mayorista por unidad</div>
+      </div>
+      <div class="fin-num">
+        <div class="val">$5.800</div>
+        <div class="lbl">Precio sugerido de reventa</div>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Dirección / Comuna</label><input class="form-input" id="p-dir" placeholder="Las Condes, Santiago"></div>
-    <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="p-notas" placeholder="Contexto, próximos pasos..."></textarea></div>
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-danger" id="btn-eliminar-prospecto" style="display:none;" onclick="confirmarEliminar('prospecto')">🗑 Eliminar</button>
-    <div class="modal-footer-right">
-      <button class="btn btn-ghost" onclick="cerrarModal('prospecto')">Cancelar</button>
-      <button class="btn btn-primary" onclick="guardarProspecto()">Guardar</button>
-    </div>
-  </div>
-</div>
-</div>
+</section>
 
-<!-- MODAL TAREA -->
-<div class="modal-overlay" id="modal-tarea">
-<div class="modal">
-  <div class="modal-header">
-    <div class="modal-title" id="modal-tarea-title">Nueva tarea</div>
-    <button class="modal-close" onclick="cerrarModal('tarea')">✕</button>
-  </div>
-  <div class="modal-body">
-    <div class="form-group"><label class="form-label">Tarea *</label><input class="form-input" id="t-titulo" placeholder="ej: Llamar a gerente de RRHH"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Empresa</label><input class="form-input" id="t-empresa" placeholder="Empresa ABC"></div>
-      <div class="form-group"><label class="form-label">Fecha límite</label><input class="form-input" id="t-fecha" type="date"></div>
+<!-- SHOWCASE SENSORIAL -->
+<section class="showcase">
+  <div class="eyebrow">El producto</div>
+  <div class="showcase-grid">
+    <div class="showcase-img-wrap">
+      <img src="fotos/ross-portada.png" alt="Ross Premium Tobacco"
+           onerror="this.src='';this.alt='Ross Premium Tobacco'">
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Tipo</label>
-        <select class="form-select" id="t-tipo">
-          <option value="llamada">📞 Llamada</option>
-          <option value="reunion">🤝 Reunión</option>
-          <option value="email">📧 Email</option>
-          <option value="propuesta">📄 Enviar propuesta</option>
-          <option value="seguimiento">🔄 Seguimiento</option>
-          <option value="instalacion">🔧 Instalación</option>
-          <option value="otro">Otro</option>
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">Asignado a</label>
-        <select class="form-select" id="t-asignado">
-          <option value="yo">Yo</option>
-          <option value="gianluca">Gianluca</option>
-          <option value="ambos">Ambos</option>
-        </select>
+    <div class="showcase-texto">
+      <span class="tag">Ross Premium Tobacco · 45g</span>
+      <h2>No es tabaco de liar.<br>Es una experiencia.</h2>
+      <p>Ross está diseñado para el consumidor exigente que ya no consume marcas comerciales masivas. Humedad perfecta, aroma balanceado y una mezcla limpia que se arma con facilidad.</p>
+      <p>Para tu minimarket, eso significa una sola cosa: clientes que vuelven.</p>
+      <div class="atributos">
+        <div class="atributo">
+          <strong>Formato</strong>
+          <span>45gr por unidad — compacto, fácil de exhibir</span>
+        </div>
+        <div class="atributo">
+          <strong>Empaque</strong>
+          <span>Diseño que destaca en vitrina sin competir con otros tabacos</span>
+        </div>
+        <div class="atributo">
+          <strong>Variedad</strong>
+          <span>Desde blends clásicos hasta frutales de alta rotación</span>
+        </div>
+        <div class="atributo">
+          <strong>Público</strong>
+          <span>Fumador joven y adulto que busca algo mejor que la cajetilla</span>
+        </div>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="t-notas" placeholder="Detalle..."></textarea></div>
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-danger" id="btn-eliminar-tarea" style="display:none;" onclick="confirmarEliminar('tarea')">🗑 Eliminar</button>
-    <div class="modal-footer-right">
-      <button class="btn btn-ghost" onclick="cerrarModal('tarea')">Cancelar</button>
-      <button class="btn btn-primary" onclick="guardarTarea()">Guardar</button>
+</section>
+
+<!-- CATÁLOGO -->
+<section class="catalogo" id="catalogo">
+  <div class="catalogo-inner">
+    <div class="catalogo-header">
+      <div>
+        <div class="eyebrow">Catálogo 2025</div>
+        <h2>18 sabores. Todos en stock.</h2>
+      </div>
+      <div class="catalogo-meta">
+        Mayorista: <strong style="color:var(--bronze)">$4.600</strong> c/u<br>
+        Sugerido reventa: <strong style="color:var(--cream)">$5.800</strong> c/u
+      </div>
+    </div>
+
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="showCat('todos')">Todos</button>
+      <button class="cat-tab" onclick="showCat('clasicos')">Clásicos & Blends</button>
+      <button class="cat-tab" onclick="showCat('frutales')">Aromáticos & Frutales</button>
+      <button class="cat-tab" onclick="showCat('frescos')">Menta & Frescor</button>
+    </div>
+
+    <div class="cat-section visible" id="cat-todos">
+      <div class="product-grid" id="grid-todos"></div>
+    </div>
+    <div class="cat-section" id="cat-clasicos">
+      <p class="cat-label">Para el fumador tradicional que busca cuerpo y profundidad</p>
+      <div class="product-grid" id="grid-clasicos"></div>
+    </div>
+    <div class="cat-section" id="cat-frutales">
+      <p class="cat-label">Alta rotación en público joven — dulzor natural y aroma intenso</p>
+      <div class="product-grid" id="grid-frutales"></div>
+    </div>
+    <div class="cat-section" id="cat-frescos">
+      <p class="cat-label">Frescura limpia para quienes buscan caladas suaves y refrescantes</p>
+      <div class="product-grid" id="grid-frescos"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DESPACHO -->
+<section class="despacho" id="despacho">
+  <div class="eyebrow">Servicio Camberwell</div>
+  <h2>Abastecimiento directo,<br>sin fricción.</h2>
+  <p class="despacho-sub">Sin couriers, sin apps, sin complicaciones. Pedido por WhatsApp y entrega en tu local el viernes.</p>
+  <div class="despacho-grid">
+    <div class="desp-item verde">
+      <div class="ico">🚚</div>
+      <strong>Despacho gratis</strong>
+      <span>En pedidos de 10 o más unidades ($46.000+) el envío es con cargo nuestro, directo a tu local.</span>
+      <div><span class="badge">10+ unidades</span></div>
+    </div>
+    <div class="desp-item gold">
+      <div class="ico">📦</div>
+      <strong>Pedido de prueba</strong>
+      <span>Desde 5 unidades para que pruebes la rotación antes de comprometerte con más stock.</span>
+      <div><span class="badge">Desde 5 unidades · $2.000 envío</span></div>
+    </div>
+    <div class="desp-item">
+      <div class="ico">📅</div>
+      <strong>Cierre y despacho</strong>
+      <span>Pedidos de lunes a jueves antes de las 15:00 hrs. Entrega garantizada cada viernes en la RM.</span>
+    </div>
+    <div class="desp-item">
+      <div class="ico">🧾</div>
+      <strong>Boleta o factura</strong>
+      <span>Emitimos el documento que necesites en cada pedido. Todo formal, sin excepciones.</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>¿Listo para introducir<br>Ross en <em>tu minimarket?</em></h2>
+  <p>Escríbenos y te mandamos una muestra antes del primer pedido.</p>
+  <div class="cta-final-buttons">
+    <a class="btn-primary" href="https://wa.me/56958252637" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+    <a class="btn-ghost" href="mailto:ealvarezvaccaro@gmail.com">Escribir por email</a>
+  </div>
+</section>
+
+<footer>
+  Camberwell — Distribución mayorista privada · Catálogo no indexado · Solo para clientes contactados directamente
+</footer>
+
+<!-- WhatsApp flotante -->
+<a class="wa-fab" href="https://wa.me/56958252637" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span>Pedir por WhatsApp</span>
+</a>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)cerrar()">
+  <div class="modal-card" id="modalCard">
+    <div class="modal-top" id="modalTop"></div>
+    <button class="modal-close" onclick="cerrar()">✕</button>
+    <div class="modal-photo-wrap">
+      <img id="modalFoto" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <h2 id="modalNombre"></h2>
+      <div class="modal-notas" id="modalNotas"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-precios">
+        <div>
+          <div class="modal-precio-label">Tu costo mayorista</div>
+          <div class="modal-precio-val">$4.600</div>
+        </div>
+        <div>
+          <div class="modal-precio-label">Sugerido reventa</div>
+          <div class="modal-precio-val">$5.800</div>
+        </div>
+        <div>
+          <div class="modal-precio-label">Tu ganancia x unidad</div>
+          <div class="modal-precio-val" style="color:var(--cream)">$1.200</div>
+        </div>
+      </div>
+      <a class="btn-primary" style="text-align:center;display:block"
+         href="https://wa.me/56958252637" target="_blank" rel="noopener">
+        Pedir por WhatsApp
+      </a>
     </div>
   </div>
 </div>
-</div>
-
-<!-- CONFIRM -->
-<div class="confirm-overlay" id="confirm-overlay">
-<div class="confirm-box">
-  <div class="confirm-icon">⚠️</div>
-  <div class="confirm-title" id="confirm-title">¿Eliminar?</div>
-  <div class="confirm-msg" id="confirm-msg">Esta acción no se puede deshacer.</div>
-  <div class="confirm-actions">
-    <button class="btn btn-ghost" onclick="cerrarConfirm()">Cancelar</button>
-    <button class="btn btn-danger" onclick="ejecutarEliminar()">Sí, eliminar</button>
-  </div>
-</div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-// DB
-// ══════════════════════════════════════════
-const DB = {
-  get:(k)=>JSON.parse(localStorage.getItem('fcrm_'+k)||'[]'),
-  set:(k,v)=>localStorage.setItem('fcrm_'+k,JSON.stringify(v)),
-  log:(txt,color='#1FD79A')=>{const a=DB.get('log');a.unshift({txt,color,ts:new Date().toISOString()});DB.set('log',a.slice(0,60));}
-};
+const PM = 4600, PR = 5800;
 
-// ══════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════
-let view='dashboard';
-let editId=null;
-let editType=null;
-let confirmCallback=null;
+const PRODUCTOS = [
+  // Clásicos & Blends
+  { nombre:"Ross Natural",           notas:"Tabaco puro · Sin aditivos · Perfil limpio",    cat:"clasicos",  color:"#5FA8D3", foto:"fotos/ross-natural.png",
+    desc:"Sin sabores agregados — el perfil más puro de la hoja. Para el fumador que prefiere el tabaco tal cual es, sin dulzores ni aromas que lo distraigan." },
+  { nombre:"Ross Cappuccino",        notas:"Café · Crema · Cálido",                          cat:"clasicos",  color:"#9C6B3F", foto:"fotos/ross-cappuccino.png",
+    desc:"Notas de café con leche y un toque de espuma dulce — cálido y aromático, para quienes disfrutan sabores de sobremesa." },
+  { nombre:"Ross Caramelo",          notas:"Tostado · Envolvente · Dulce",                   cat:"clasicos",  color:"#D98A3D", foto:"fotos/ross-caramelo.png",
+    desc:"Dulzor tostado y envolvente, como caramelo derretido. Un sabor reconfortante que suaviza cada calada de principio a fin." },
+  { nombre:"Ross Chocolate",         notas:"Cacao · Profundo · Denso",                       cat:"clasicos",  color:"#8B5A2B", foto:"fotos/ross-chocolate.png",
+    desc:"Cuerpo cálido con notas profundas de cacao tostado. Denso y reconfortante — para quienes buscan algo serio." },
+  { nombre:"Ross Vainilla",          notas:"Suave · Cremoso · Aromático",                    cat:"clasicos",  color:"#E8C547", foto:"fotos/ross-vainilla.png",
+    desc:"Suave y cremosa, la vainilla suaviza el tabaco de base dejando un aroma dulce y envolvente, sin resultar pesado." },
 
-const ETAPAS={
-  prospecto:{label:'Prospecto',color:'#4A5448'},
-  contactado:{label:'Contactado',color:'#5B9BD5'},
-  reunion:{label:'Reunión',color:'#9B7FD4'},
-  propuesta:{label:'Propuesta',color:'#F4C843'},
-  cierre:{label:'En cierre',color:'#1FD79A'},
-  ganado:{label:'Ganado ✓',color:'#1FD79A'},
-};
-const ORDEN_ETAPAS=['prospecto','contactado','reunion','propuesta','cierre','ganado'];
+  // Aromáticos & Frutales
+  { nombre:"Ross Arándanos",         notas:"Frutal · Ácido suave · Profundo",                cat:"frutales",  color:"#5B6BC0", foto:"fotos/ross-arandanos.png",
+    desc:"Notas profundas de arándano con un fondo ligeramente ácido. Dulzor contenido que distingue este sabor del resto de la línea." },
+  { nombre:"Ross Cereza",            notas:"Intenso · Dulce · Ácido",                        cat:"frutales",  color:"#C23B4A", foto:"fotos/ross-cereza.png",
+    desc:"Intensa y dulce con ese característico toque ácido de la cereza madura. Uno de los sabores frutales más pedidos de la línea." },
+  { nombre:"Ross Chicle",            notas:"Dulce · Nostálgico · Lúdico",                    cat:"frutales",  color:"#E37FAE", foto:"fotos/ross-chicle.png",
+    desc:"Dulce y nostálgico — recuerda al chicle de bomba clásico. Un sabor fuera de lo común que llama la atención en vitrina." },
+  { nombre:"Ross Choco Berries",     notas:"Chocolate · Berries · Ácido final",              cat:"frutales",  color:"#A94868", foto:"fotos/ross-choco-berries.png",
+    desc:"Chocolate y frutos rojos en una misma calada — dulce, profundo y con un final ácido que equilibra el conjunto." },
+  { nombre:"Ross Frutos del Bosque", notas:"Moras · Frambuesas · Arándanos",                 cat:"frutales",  color:"#C23B7C", foto:"fotos/ross-frutos-del-bosque.png",
+    desc:"Mezcla jugosa de moras, frambuesas y arándanos silvestres. Frescura y dulzor natural sin perder el carácter del tabaco." },
+  { nombre:"Ross Mango",             notas:"Tropical · Dulce suave · Luminoso",              cat:"frutales",  color:"#D9A227", foto:"fotos/ross-mango.png",
+    desc:"Tropical y luminoso — el mango maduro aporta un dulzor suave y aromático, ideal para quienes prefieren sabores frutales." },
+  { nombre:"Ross Maracuyá",          notas:"Ácido · Tropical · Intenso",                     cat:"frutales",  color:"#E0B400", foto:"fotos/ross-maracuya.png",
+    desc:"El maracuyá aporta una acidez viva que despierta el paladar. Un sabor intenso para quienes buscan algo fuera de lo común." },
+  { nombre:"Ross Sandía",            notas:"Jugoso · Veraniego · Liviano",                   cat:"frutales",  color:"#D1444A", foto:"fotos/ross-sandia.png",
+    desc:"Dulce y veraniego, con esa nota jugosa de la sandía recién cortada. Liviano y fácil de disfrutar." },
+  { nombre:"Ross Uva",               notas:"Vinosoúnico · Dulce · Carácter",                 cat:"frutales",  color:"#8B5FBF", foto:"fotos/ross-uva.png",
+    desc:"Notas profundas de uva concord, dulces y un poco vinosas — un sabor con carácter que se distingue del resto." },
 
-// ══════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════
-function dias(f){return Math.floor((Date.now()-new Date(f))/86400000);}
-function fmtTs(ts){const d=Math.floor((Date.now()-new Date(ts))/60000);if(d<60)return`hace ${d}m`;if(d<1440)return`hace ${Math.floor(d/60)}h`;return`hace ${Math.floor(d/1440)}d`;}
-function valorEst(p){const b=p.personas>=200?205155:p.personas>=150?154000:136000;return Math.round(b*(p.personas||100)/200);}
-function hoy(){return new Date().toISOString().split('T')[0];}
-function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'')+' show';setTimeout(()=>t.classList.remove('show'),3000);}
+  // Menta & Frescor
+  { nombre:"Ross Menta",             notas:"Limpio · Directo · Clásico",                     cat:"frescos",   color:"#4C9A4C", foto:"fotos/ross-menta.png",
+    desc:"El clásico de siempre: frescura limpia y directa, sin distracciones. Simple y consistente — el más pedido de la línea fresca." },
+  { nombre:"Ross Manzana Ice",       notas:"Manzana verde · Helado · Crujiente",             cat:"frescos",   color:"#4FB3A5", foto:"fotos/ross-manzana-ice.png",
+    desc:"Manzana verde fresca con un toque mentolado helado al final — crujiente y refrescante, perfecto para los días de calor." },
+  { nombre:"Ross Menta Berries",     notas:"Menta · Berries · Balance frío-dulce",           cat:"frescos",   color:"#7FAE6A", foto:"fotos/ross-menta-berries.png",
+    desc:"La frescura de la menta se encuentra con el dulzor de los berries — un balance entre lo frío y lo frutal que sorprende." },
+  { nombre:"Ross Menta Chocolate",   notas:"After-dinner · Menta · Cacao",                   cat:"frescos",   color:"#6B7A4E", foto:"fotos/ross-menta-chocolate.png",
+    desc:"El frescor de la menta contrasta con la profundidad del chocolate — como una menta after-dinner en formato tabaco." },
+];
 
-function updateBadges(){
-  const p=DB.get('prospectos');
-  document.getElementById('badge-pipeline').textContent=p.filter(x=>x.etapa!=='ganado').length;
-  document.getElementById('badge-clientes').textContent=p.filter(x=>x.etapa==='ganado').length;
-  document.getElementById('badge-tareas').textContent=DB.get('tareas').filter(x=>!x.done).length;
-}
-
-// ══════════════════════════════════════════
-// NAV
-// ══════════════════════════════════════════
-function nav(v,el){
-  view=v;
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(el)el.classList.add('active');
-  render();
-}
-
-// ══════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════
-function render(){
-  const titles={dashboard:['Dashboard','Vista general del negocio'],pipeline:['Pipeline de ventas','Prospectos y seguimiento'],clientes:['Clientes activos','Máquinas instaladas'],maquinas:['Máquinas','Inventario y estado'],tareas:['Tareas pendientes','Acciones del equipo']};
-  const[tt,ts]=titles[view]||['',''];
-  document.getElementById('page-title').textContent=tt;
-  document.getElementById('page-sub').textContent=ts;
-  const c=document.getElementById('content');
-  if(view==='dashboard')c.innerHTML=renderDash();
-  else if(view==='pipeline')c.innerHTML=renderPipeline();
-  else if(view==='clientes')c.innerHTML=renderClientes();
-  else if(view==='maquinas')c.innerHTML=renderMaquinas();
-  else if(view==='tareas')c.innerHTML=renderTareas();
-  updateBadges();
-}
-
-// ── DASHBOARD ──
-function renderDash(){
-  const p=DB.get('prospectos');
-  const t=DB.get('tareas').filter(x=>!x.done);
-  const log=DB.get('log');
-  return`
-  <div class="stats-row">
-    <div class="stat-card" style="--accent:#1FD79A;"><div class="stat-label">Prospectos activos</div><div class="stat-value">${p.filter(x=>x.etapa!=='ganado').length}</div><div class="stat-sub">en pipeline</div></div>
-    <div class="stat-card" style="--accent:#F4C843;"><div class="stat-label">En cierre</div><div class="stat-value">${p.filter(x=>x.etapa==='cierre').length}</div><div class="stat-sub">listos para cerrar</div></div>
-    <div class="stat-card" style="--accent:#5B9BD5;"><div class="stat-label">Valor potencial/mes</div><div class="stat-value" style="font-size:1rem;">$${(p.reduce((s,x)=>s+valorEst(x),0)/1000000).toFixed(1)}M</div><div class="stat-sub">si cierras todo</div></div>
-    <div class="stat-card" style="--accent:#E24B4A;"><div class="stat-label">Tareas pendientes</div><div class="stat-value">${t.length}</div><div class="stat-sub">${t.filter(x=>x.fecha<=hoy()).length} vencen hoy</div></div>
-  </div>
-  <div class="section-header"><div><div class="section-title-text">Prospectos recientes</div></div><button class="btn btn-ghost" onclick="nav('pipeline')" style="font-size:.75rem;">Ver pipeline →</button></div>
-  <div class="data-table" style="margin-bottom:1.5rem;">
-    <div class="table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 80px;"><div class="th">Empresa</div><div class="th">Personas</div><div class="th">Etapa</div><div class="th">Valor est./mes</div><div class="th"></div></div>
-    ${p.filter(x=>x.etapa!=='ganado').slice(0,6).map(x=>`
-    <div class="table-row-item" style="grid-template-columns:2fr 1fr 1fr 1fr 80px;">
-      <div class="td td-main">${x.empresa}<br><span style="font-size:.7rem;color:var(--text3);font-weight:400;">${x.contacto}</span></div>
-      <div class="td td-mono">${x.personas||'?'}</div>
-      <div class="td"><span class="status-pill" style="color:${ETAPAS[x.etapa]?.color};background:${ETAPAS[x.etapa]?.color}18;">${ETAPAS[x.etapa]?.label||x.etapa}</span></div>
-      <div class="td td-mono" style="color:var(--green);">$${(valorEst(x)/1000).toFixed(0)}k</div>
-      <div class="td"><div class="row-actions"><button class="btn btn-ghost" style="font-size:.7rem;padding:.3rem .6rem;" onclick="abrirProspecto(${x.id})">Editar</button></div></div>
-    </div>`).join('')||'<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Sin prospectos aún</div><button class="btn btn-primary" onclick="abrirProspecto()">+ Agregar primero</button></div>'}
-  </div>
-  <div class="bottom-grid">
-    <div>
-      <div class="section-header"><div class="section-title-text">Tareas urgentes</div><button class="btn btn-ghost" onclick="abrirTarea()" style="font-size:.75rem;">+ Tarea</button></div>
-      <div class="data-table">
-        ${t.slice(0,5).map(x=>`
-        <div class="table-row-item" style="grid-template-columns:auto 1fr 80px 60px;gap:.75rem;">
-          <div style="width:16px;height:16px;border:2px solid var(--border);border-radius:4px;cursor:pointer;flex-shrink:0;" onclick="toggleTarea(${x.id})"></div>
-          <div class="td td-main" style="cursor:pointer;" onclick="abrirTarea(${x.id})">${x.titulo}<br><span style="font-size:.7rem;color:var(--text3);font-weight:400;">${x.empresa||'—'}</span></div>
-          <div class="td td-mono" style="font-size:.7rem;">${x.fecha||'—'}</div>
-          <div class="td"><span class="tag ${x.fecha&&x.fecha<=hoy()?'tag-red':'tag-blue'}">${x.fecha&&x.fecha<=hoy()?'Hoy':'Pend.'}</span></div>
-        </div>`).join('')||'<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Sin tareas pendientes</div></div>'}
-      </div>
+function makeCard(p, i) {
+  return `<div class="product-card" onclick="abrir(${i})">
+    <div class="accent" style="background:${p.color}"></div>
+    <div class="product-photo">
+      <img src="${p.foto}" alt="${p.nombre}" loading="lazy">
     </div>
-    <div>
-      <div class="section-header"><div class="section-title-text">Actividad</div></div>
-      <div class="activity-feed">
-        ${log.slice(0,8).map(a=>`<div class="activity-item"><div class="activity-dot" style="background:${a.color};"></div><div class="activity-text">${a.txt}</div><div class="activity-time">${fmtTs(a.ts)}</div></div>`).join('')||'<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Sin actividad aún</div></div>'}
-      </div>
+    <div class="product-data">
+      <div class="nombre">${p.nombre}</div>
+      <div class="notas">${p.notas}</div>
+      <div class="precio-mayor">$${PM.toLocaleString("es-CL")}</div>
+      <div class="precio-reventa">Reventa: $${PR.toLocaleString("es-CL")}</div>
     </div>
   </div>`;
 }
 
-// ── PIPELINE ──
-function renderPipeline(){
-  const p=DB.get('prospectos');
-  const etapas=['prospecto','contactado','reunion','propuesta','cierre'];
-  return`
-  <div class="pipeline">
-    ${etapas.map(e=>{
-      const cards=p.filter(x=>x.etapa===e);
-      return`<div class="pipeline-col">
-        <div class="pipeline-header"><div class="pipeline-stage-dot" style="background:${ETAPAS[e].color};"></div><div class="pipeline-stage-name">${ETAPAS[e].label}</div><div class="pipeline-count">${cards.length}</div></div>
-        <div class="pipeline-cards">
-          ${cards.map(x=>`
-          <div class="prospect-card ${x.prioridad==='urgente'?'hot':x.prioridad==='alta'?'urgent':''}">
-            <div class="prospect-name">${x.empresa}</div>
-            <div class="prospect-meta">${x.contacto}${x.cargo?` · ${x.cargo}`:''}</div>
-            <div class="prospect-footer">
-              <div class="prospect-personas">👥 ${x.personas||'?'}</div>
-              <div class="prospect-value">$${(valorEst(x)/1000).toFixed(0)}k/m</div>
-              <div class="prospect-days ${dias(x.ua||x.creado)>7?'warn':''}">${dias(x.ua||x.creado)}d</div>
-            </div>
-            <div class="card-actions">
-              <button class="card-btn card-btn-advance" onclick="avanzarEtapa(${x.id})">${e==='cierre'?'✓ Ganado':'Avanzar →'}</button>
-              <button class="card-btn card-btn-edit" onclick="abrirProspecto(${x.id})">✎</button>
-              <button class="card-btn card-btn-del" onclick="confirmarEliminar('prospecto',${x.id},'${x.empresa}')">🗑</button>
-            </div>
-          </div>`).join('')}
-          <div class="add-card" onclick="abrirProspectoEtapa('${e}')">+ Agregar</div>
-        </div>
-      </div>`;
-    }).join('')}
-  </div>
-  <div style="font-size:.75rem;color:var(--text3);font-family:'Space Mono',monospace;">Valor total pipeline: <span style="color:var(--green);font-weight:700;">$${(p.reduce((s,x)=>s+valorEst(x),0)/1000000).toFixed(1)}M CLP/mes</span> estimado si cierras todo</div>`;
+// Render grids
+const gTodos    = document.getElementById("grid-todos");
+const gClasicos = document.getElementById("grid-clasicos");
+const gFrutales = document.getElementById("grid-frutales");
+const gFrescos  = document.getElementById("grid-frescos");
+
+PRODUCTOS.forEach((p, i) => {
+  const html = makeCard(p, i);
+  gTodos.insertAdjacentHTML("beforeend", html);
+  if (p.cat === "clasicos") gClasicos.insertAdjacentHTML("beforeend", html);
+  if (p.cat === "frutales") gFrutales.insertAdjacentHTML("beforeend", html);
+  if (p.cat === "frescos")  gFrescos.insertAdjacentHTML("beforeend", html);
+});
+
+function showCat(cat) {
+  document.querySelectorAll(".cat-section").forEach(s => s.classList.remove("visible"));
+  document.querySelectorAll(".cat-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("cat-" + cat).classList.add("visible");
+  event.target.classList.add("active");
 }
 
-// ── CLIENTES ──
-function renderClientes(){
-  const g=DB.get('prospectos').filter(x=>x.etapa==='ganado');
-  if(!g.length)return`<div class="empty"><div class="empty-icon">🏢</div><div class="empty-text">Sin clientes activos.<br>Cuando cierres un prospecto aparece aquí.</div><button class="btn btn-primary" onclick="nav('pipeline')">Ver pipeline →</button></div>`;
-  return`<div class="data-table">
-    <div class="table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 80px;"><div class="th">Empresa</div><div class="th">Personas</div><div class="th">Máquinas</div><div class="th">Neto est./mes</div><div class="th">Estado</div><div class="th"></div></div>
-    ${g.map(x=>`<div class="table-row-item" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 80px;">
-      <div class="td td-main">${x.empresa}<br><span style="font-size:.7rem;color:var(--text3);font-weight:400;">${x.contacto} · ${x.tel||'—'}</span></div>
-      <div class="td td-mono">${x.personas}</div><div class="td td-mono">1</div>
-      <div class="td td-mono" style="color:var(--green);">$${(valorEst(x)/1000).toFixed(0)}k</div>
-      <div class="td"><span class="status-pill s-active">Activo</span></div>
-      <div class="td"><div class="row-actions"><button class="btn btn-ghost" style="font-size:.7rem;padding:.3rem .5rem;" onclick="abrirProspecto(${x.id})">Ver</button></div></div>
-    </div>`).join('')}
-  </div>`;
+function abrir(i) {
+  const p = PRODUCTOS[i];
+  document.getElementById("modalTop").style.background = p.color;
+  document.getElementById("modalCard").style.borderColor = p.color;
+  document.getElementById("modalFoto").src = p.foto;
+  document.getElementById("modalFoto").alt = p.nombre;
+  document.getElementById("modalNombre").textContent = p.nombre;
+  document.getElementById("modalNombre").style.color = p.color;
+  document.getElementById("modalNotas").textContent = p.notas;
+  document.getElementById("modalDesc").textContent = p.desc;
+  document.getElementById("modalOverlay").classList.add("open");
 }
-
-// ── MAQUINAS ──
-function renderMaquinas(){
-  return`<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><div><div style="font-size:.9rem;font-weight:700;">Máquina #001</div><div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--text3);">Mini Store · 5 bandejas · 78x64cm</div></div><span class="status-pill s-warn">En instalación</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem;">
-        <div style="background:var(--bg3);border-radius:6px;padding:.6rem .75rem;"><div style="font-size:.6rem;color:var(--text3);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:2px;">Arriendo</div><div style="font-size:.8rem;font-weight:600;">6,5 UF/mes</div></div>
-        <div style="background:var(--bg3);border-radius:6px;padding:.6rem .75rem;"><div style="font-size:.6rem;color:var(--text3);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:2px;">Equilibrio</div><div style="font-size:.8rem;font-weight:600;">12 ventas/día</div></div>
-        <div style="background:var(--bg3);border-radius:6px;padding:.6rem .75rem;"><div style="font-size:.6rem;color:var(--text3);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:2px;">Meta neto</div><div style="font-size:.8rem;font-weight:600;color:var(--green);">$205k/mes</div></div>
-        <div style="background:var(--bg3);border-radius:6px;padding:.6rem .75rem;"><div style="font-size:.6rem;color:var(--text3);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:2px;">Compra mes 9</div><div style="font-size:.8rem;font-weight:600;">$1.236.043</div></div>
-      </div>
-      <div style="background:var(--bg3);border-radius:6px;padding:.6rem .75rem;"><div style="font-size:.6rem;color:var(--text3);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:.4rem;">Bandejas</div><div style="display:flex;gap:.3rem;flex-wrap:wrap;"><span class="tag tag-green">B1: Gohan</span><span class="tag tag-red">B2: Sandwich</span><span class="tag tag-blue">B3: Chocolates</span><span class="tag tag-gray">B4: Snacks</span><span class="tag tag-yellow">B5: Bebidas</span></div></div>
-    </div>
-    <div style="background:var(--bg2);border:1px dashed var(--border);border-radius:var(--r);padding:1.25rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;cursor:pointer;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="font-size:2rem;opacity:.2;">🤖</div>
-      <div style="font-size:.85rem;font-weight:600;color:var(--text2);">+ Agregar máquina #002</div>
-      <div style="font-size:.75rem;color:var(--text3);">Segunda máquina del plan</div>
-    </div>
-  </div>`;
+function cerrar() {
+  document.getElementById("modalOverlay").classList.remove("open");
 }
-
-// ── TAREAS ──
-function renderTareas(){
-  const t=DB.get('tareas');
-  const pend=t.filter(x=>!x.done);
-  const done=t.filter(x=>x.done);
-  return`
-  <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;">
-    <button class="btn btn-primary" onclick="abrirTarea()">+ Nueva tarea</button>
-    <span style="font-size:.75rem;color:var(--text3);font-family:'Space Mono',monospace;">${pend.length} pendientes · ${done.length} completadas</span>
-  </div>
-  <div class="data-table" style="margin-bottom:1rem;">
-    <div class="table-head" style="grid-template-columns:auto 1fr 120px 80px 80px 80px;"><div class="th">✓</div><div class="th">Tarea</div><div class="th">Empresa</div><div class="th">Fecha</div><div class="th">Asignado</div><div class="th"></div></div>
-    ${pend.map(x=>`
-    <div class="table-row-item" style="grid-template-columns:auto 1fr 120px 80px 80px 80px;">
-      <div style="width:16px;height:16px;border:2px solid var(--border);border-radius:4px;cursor:pointer;flex-shrink:0;" onclick="toggleTarea(${x.id})"></div>
-      <div class="td td-main" style="cursor:pointer;" onclick="abrirTarea(${x.id})">${x.titulo}<br><span style="font-size:.7rem;color:var(--text3);font-weight:400;">${x.tipo||''}</span></div>
-      <div class="td" style="font-size:.78rem;">${x.empresa||'—'}</div>
-      <div class="td td-mono" style="font-size:.7rem;">${x.fecha||'—'}</div>
-      <div class="td"><span class="tag tag-gray">${x.asignado||'yo'}</span></div>
-      <div class="td"><div class="row-actions">
-        <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;" onclick="abrirTarea(${x.id})">✎</button>
-        <button class="btn btn-danger" style="font-size:.7rem;padding:.25rem .5rem;" onclick="confirmarEliminar('tarea',${x.id},'${x.titulo.replace(/'/g,"\\'")}')">🗑</button>
-      </div></div>
-    </div>`).join('')||'<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Sin tareas pendientes</div></div>'}
-  </div>
-  ${done.length?`<div style="font-size:.75rem;color:var(--text3);margin-bottom:.5rem;font-family:'Space Mono',monospace;">COMPLETADAS (${done.length})</div>
-  <div class="data-table" style="opacity:.5;">
-    ${done.slice(0,5).map(x=>`<div class="table-row-item" style="grid-template-columns:auto 1fr 120px 80px 80px 80px;cursor:default;">
-      <div style="width:16px;height:16px;border:2px solid var(--green);border-radius:4px;background:var(--green);flex-shrink:0;cursor:pointer;" onclick="toggleTarea(${x.id})"></div>
-      <div class="td" style="text-decoration:line-through;color:var(--text3);">${x.titulo}</div>
-      <div class="td" style="font-size:.78rem;color:var(--text3);">${x.empresa||'—'}</div>
-      <div class="td td-mono" style="font-size:.7rem;color:var(--text3);">${x.fecha||'—'}</div>
-      <div class="td"><span class="tag tag-gray">${x.asignado||'yo'}</span></div>
-      <div class="td"><div class="row-actions"><button class="btn btn-danger" style="font-size:.7rem;padding:.25rem .5rem;" onclick="confirmarEliminar('tarea',${x.id},'${x.titulo.replace(/'/g,"\\'")}')">🗑</button></div></div>
-    </div>`).join('')}
-  </div>`:''}`;
-}
-
-// ══════════════════════════════════════════
-// PROSPECTO CRUD
-// ══════════════════════════════════════════
-function abrirProspecto(id){
-  editId=id||null; editType='prospecto';
-  document.getElementById('modal-prospecto-title').textContent=id?'Editar prospecto':'Nuevo prospecto';
-  document.getElementById('btn-eliminar-prospecto').style.display=id?'':'none';
-  const p=id?DB.get('prospectos').find(x=>x.id===id):{};
-  document.getElementById('p-empresa').value=p.empresa||'';
-  document.getElementById('p-contacto').value=p.contacto||'';
-  document.getElementById('p-cargo').value=p.cargo||'';
-  document.getElementById('p-tel').value=p.tel||'';
-  document.getElementById('p-email').value=p.email||'';
-  document.getElementById('p-personas').value=p.personas||'';
-  document.getElementById('p-etapa').value=p.etapa||'prospecto';
-  document.getElementById('p-prioridad').value=p.prioridad||'normal';
-  document.getElementById('p-dir').value=p.dir||'';
-  document.getElementById('p-notas').value=p.notas||'';
-  document.getElementById('modal-prospecto').classList.add('open');
-}
-function abrirProspectoEtapa(e){abrirProspecto();setTimeout(()=>document.getElementById('p-etapa').value=e,10);}
-function cerrarModal(t){document.getElementById('modal-'+t).classList.remove('open');}
-
-function guardarProspecto(){
-  const empresa=document.getElementById('p-empresa').value.trim();
-  const contacto=document.getElementById('p-contacto').value.trim();
-  if(!empresa||!contacto){toast('⚠ Empresa y contacto son requeridos',true);return;}
-  const datos={empresa,contacto,cargo:document.getElementById('p-cargo').value.trim(),tel:document.getElementById('p-tel').value.trim(),email:document.getElementById('p-email').value.trim(),personas:parseInt(document.getElementById('p-personas').value)||0,etapa:document.getElementById('p-etapa').value,prioridad:document.getElementById('p-prioridad').value,dir:document.getElementById('p-dir').value.trim(),notas:document.getElementById('p-notas').value.trim(),ua:hoy()};
-  const list=DB.get('prospectos');
-  if(editId){
-    const i=list.findIndex(x=>x.id===editId);
-    if(i!==-1)list[i]={...list[i],...datos};
-    DB.log(`<strong>${empresa}</strong> actualizado`,'#F4C843');
-    toast('✓ Prospecto actualizado');
-  }else{
-    list.push({id:Date.now(),creado:hoy(),...datos});
-    DB.log(`Nuevo prospecto: <strong>${empresa}</strong>`,'#5B9BD5');
-    toast('✓ Prospecto guardado');
-  }
-  DB.set('prospectos',list);
-  cerrarModal('prospecto');
-  render();
-}
-
-function avanzarEtapa(id){
-  const list=DB.get('prospectos');
-  const p=list.find(x=>x.id===id);
-  if(!p)return;
-  const i=ORDEN_ETAPAS.indexOf(p.etapa);
-  if(i<ORDEN_ETAPAS.length-1){
-    const nueva=ORDEN_ETAPAS[i+1];
-    p.etapa=nueva; p.ua=hoy();
-    DB.set('prospectos',list);
-    DB.log(`<strong>${p.empresa}</strong> → ${ETAPAS[nueva]?.label||nueva}`,ETAPAS[nueva]?.color||'#1FD79A');
-    toast(`→ ${p.empresa} avanzó a ${ETAPAS[nueva]?.label||nueva}`);
-    render();
-  }
-}
-
-// ══════════════════════════════════════════
-// TAREA CRUD
-// ══════════════════════════════════════════
-function abrirTarea(id){
-  editId=id||null; editType='tarea';
-  document.getElementById('modal-tarea-title').textContent=id?'Editar tarea':'Nueva tarea';
-  document.getElementById('btn-eliminar-tarea').style.display=id?'':'none';
-  const t=id?DB.get('tareas').find(x=>x.id===id):{};
-  document.getElementById('t-titulo').value=t.titulo||'';
-  document.getElementById('t-empresa').value=t.empresa||'';
-  document.getElementById('t-fecha').value=t.fecha||'';
-  document.getElementById('t-tipo').value=t.tipo||'llamada';
-  document.getElementById('t-asignado').value=t.asignado||'yo';
-  document.getElementById('t-notas').value=t.notas||'';
-  document.getElementById('modal-tarea').classList.add('open');
-}
-
-function guardarTarea(){
-  const titulo=document.getElementById('t-titulo').value.trim();
-  if(!titulo){toast('⚠ Escribe la tarea',true);return;}
-  const datos={titulo,empresa:document.getElementById('t-empresa').value.trim(),fecha:document.getElementById('t-fecha').value,tipo:document.getElementById('t-tipo').value,asignado:document.getElementById('t-asignado').value,notas:document.getElementById('t-notas').value.trim()};
-  const list=DB.get('tareas');
-  if(editId){
-    const i=list.findIndex(x=>x.id===editId);
-    if(i!==-1)list[i]={...list[i],...datos};
-    toast('✓ Tarea actualizada');
-  }else{
-    list.push({id:Date.now(),done:false,...datos});
-    DB.log(`Nueva tarea: <strong>${titulo}</strong>`,'#9B7FD4');
-    toast('✓ Tarea guardada');
-  }
-  DB.set('tareas',list);
-  cerrarModal('tarea');
-  render();
-}
-
-function toggleTarea(id){
-  const list=DB.get('tareas');
-  const t=list.find(x=>x.id===id);
-  if(t){t.done=!t.done;DB.set('tareas',list);if(t.done){DB.log(`Tarea completada: <strong>${t.titulo}</strong>`,'#1FD79A');toast('✓ Completada');}else{toast('↩ Reabierta');} render();}
-}
-
-// ══════════════════════════════════════════
-// ELIMINAR
-// ══════════════════════════════════════════
-function confirmarEliminar(tipo,id,nombre){
-  editId=id; editType=tipo;
-  // Si viene desde el modal
-  if(!id){
-    const list=tipo==='prospecto'?DB.get('prospectos'):DB.get('tareas');
-    const item=list.find(x=>x.id===editId);
-    nombre=item?.empresa||item?.titulo||'';
-  }
-  document.getElementById('confirm-title').textContent=`¿Eliminar ${tipo==='prospecto'?'prospecto':'tarea'}?`;
-  document.getElementById('confirm-msg').textContent=`"${nombre}" será eliminado permanentemente.`;
-  document.getElementById('confirm-overlay').classList.add('open');
-}
-function cerrarConfirm(){document.getElementById('confirm-overlay').classList.remove('open');}
-function ejecutarEliminar(){
-  const key=editType==='prospecto'?'prospectos':'tareas';
-  const list=DB.get(key).filter(x=>x.id!==editId);
-  DB.set(key,list);
-  DB.log(`Eliminado: <strong>${editType}</strong>`,'#E24B4A');
-  toast('🗑 Eliminado');
-  cerrarConfirm();
-  cerrarModal(editType);
-  render();
-}
-
-// ══════════════════════════════════════════
-// EXPORT
-// ══════════════════════════════════════════
-function exportData(){
-  const data={prospectos:DB.get('prospectos'),tareas:DB.get('tareas'),exportado:new Date().toISOString()};
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
-  a.download=`foodly-crm-${hoy()}.json`;
-  a.click();
-  toast('↓ Datos exportados');
-}
-
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open,.confirm-overlay.open').forEach(m=>m.classList.remove('open'));}});
-document.querySelectorAll('.modal-overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
-document.getElementById('confirm-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)cerrarConfirm();});
-render();
+document.addEventListener("keydown", e => { if (e.key === "Escape") cerrar(); });
 </script>
 </body>
 </html>
